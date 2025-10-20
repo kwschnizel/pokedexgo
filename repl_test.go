@@ -20,7 +20,7 @@ func TestCleanInput(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		actual := CleanInput(c.input)
+		actual := cleanInput(c.input)
 		if len(actual) != len(c.expected) {
 			t.Errorf("In TestCleanInput: length of result - %d does not match expected - %d", len(actual), len(c.expected))
 		}
