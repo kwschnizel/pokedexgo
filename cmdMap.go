@@ -5,9 +5,9 @@ import (
 )
 
 func cmdMap(config *cmdConfig, _ []string) error {
-	locations, err := config.pokeClient.ListLocations(config.nextLocationUrl)
+	locations, err := config.pokeClient.GetLocationsList(config.nextLocationUrl)
 	if err != nil {
-		return err
+		return fmt.Errorf("error from cmdMap: %w", err)
 	}
 
 	config.nextLocationUrl = locations.Next
@@ -25,9 +25,9 @@ func cmdMapb(config *cmdConfig, _ []string) error {
 		return nil
 	}
 
-	locations, err := config.pokeClient.ListLocations(config.prevLocationUrl)
+	locations, err := config.pokeClient.GetLocationsList(config.prevLocationUrl)
 	if err != nil {
-		return err
+		return fmt.Errorf("error from cmdMapb: %w", err)
 	}
 
 	config.nextLocationUrl = locations.Next

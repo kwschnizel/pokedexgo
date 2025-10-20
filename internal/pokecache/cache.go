@@ -28,22 +28,21 @@ func NewCache(interval time.Duration) *Cache {
 
 func (c *Cache) Add(key string, val []byte) {
 	c.mux.Lock()
+	defer c.mux.Unlock()
 	c.cacheMap[key] = cacheEntry{
 		val:       val,
 		createdAt: time.Now(),
 	}
-	c.mux.Unlock()
 }
 
 func (c *Cache) Get(key string) ([]byte, bool) {
 	c.mux.Lock()
+	defer c.mux.Unlock()
 	res, ok := c.cacheMap[key]
-	c.mux.Unlock()
-
 	return res.val, ok
 }
 
-// TODO: Implement a better way to clean the cache because this is awful
+// TODO: Implement a better way to clean the cache because this sucks
 func (c *Cache) reapLoop(interval time.Duration) {
 	ticker := time.NewTicker(interval)
 	for range ticker.C {
