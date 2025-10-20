@@ -14,15 +14,17 @@ type cmdConfig struct {
 	pokeClient      pokeapi.Client
 }
 
+type cmdFunc func(*cmdConfig, []string) error
+
 type cliCmd struct {
 	name        string
 	alias       []string
 	description string
-	callback    func(*cmdConfig) error
+	callback    cmdFunc
 }
 
 var cmdList = []cliCmd{}
-var cmds = make(map[string]func(*cmdConfig) error)
+var cmds = make(map[string]cmdFunc)
 
 func init() {
 	// Init cmdList for the help command
@@ -51,6 +53,12 @@ func init() {
 			description: "Display the names of the previous 20 locations in the PokeWorld",
 			callback:    cmdMapb,
 		},
+		{
+			name:        "explore",
+			alias:       []string{"ex"},
+			description: "Display info of a given <area_name> from map command",
+			callback:    cmdExplore,
+		},
 	}
 
 	// Building command map
@@ -68,14 +76,14 @@ func cleanInput(text string) []string {
 	return res
 }
 
-func cmdExit(_ *cmdConfig) error {
+func cmdExit(_ *cmdConfig, _ []string) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 
 	return fmt.Errorf("Error: program should have exited")
 }
 
-func cmdHelp(_ *cmdConfig) error {
+func cmdHelp(_ *cmdConfig, _ []string) error {
 	fmt.Println()
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("-----------------------")
