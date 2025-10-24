@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
 
 func cmdMap(config *cmdConfig, _ []string) error {
@@ -12,8 +13,11 @@ func cmdMap(config *cmdConfig, _ []string) error {
 
 	config.nextLocationUrl = locations.Next
 	config.prevLocationUrl, _ = locations.Previous.(string)
+
 	for _, loc := range locations.Results {
-		fmt.Println(loc.Name)
+		locUrl := strings.Split(loc.URL, "/")
+		id := locUrl[len(locUrl)-2]
+		fmt.Printf("%4v  %v\n", id, loc.Name)
 	}
 
 	return nil
@@ -33,7 +37,9 @@ func cmdMapb(config *cmdConfig, _ []string) error {
 	config.nextLocationUrl = locations.Next
 	config.prevLocationUrl, _ = locations.Previous.(string)
 	for _, loc := range locations.Results {
-		fmt.Println(loc.Name)
+		locUrl := strings.Split(loc.URL, "/")
+		id := locUrl[len(locUrl)-2]
+		fmt.Printf("%4v  %v\n", id, loc.Name)
 	}
 
 	return nil

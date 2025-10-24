@@ -12,6 +12,7 @@ type cmdConfig struct {
 	nextLocationUrl string
 	prevLocationUrl string
 	pokeClient      pokeapi.Client
+	pokedex         map[string]pokeapi.PokemonInfo
 }
 
 type cmdFunc func(*cmdConfig, []string) error
@@ -56,8 +57,26 @@ func init() {
 		{
 			name:        "explore",
 			alias:       []string{"ex"},
-			description: "Display info of a given <area_name> from map command",
+			description: "Display info of a given <area_name> or <area_id>",
 			callback:    cmdExplore,
+		},
+		{
+			name:        "catch",
+			alias:       []string{"c"},
+			description: "Attempt to catch a given <pokemon_name>",
+			callback:    cmdCatch,
+		},
+		{
+			name:        "inspect",
+			alias:       []string{"i"},
+			description: "Lookup Info on <pokemon_name> from pokemon you've captured",
+			callback:    cmdInspect,
+		},
+		{
+			name:        "pokedex",
+			alias:       []string{"p", "ls"},
+			description: "List all the pokemon in your pokedex",
+			callback:    cmdPokedex,
 		},
 	}
 
@@ -87,11 +106,10 @@ func cmdHelp(_ *cmdConfig, _ []string) error {
 	fmt.Println()
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("-----------------------")
-	fmt.Println("Usage:")
 	fmt.Println()
 
 	for _, v := range cmdList {
-		fmt.Printf(" %v (%v): \n   %v\n\n", v.name, strings.Join(v.alias, ", "), v.description)
+		fmt.Printf(" %v (alias: %v): \n   %v\n\n", v.name, strings.Join(v.alias, ", "), v.description)
 
 	}
 	return nil

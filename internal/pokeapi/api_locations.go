@@ -27,8 +27,8 @@ func (c *Client) GetLocationsList(pageUrl string) (LocationsList, error) {
 
 }
 
-func (c *Client) GetLocationInfo(areaName string) (LocationInfo, error) {
-	url := locationUrl + "/" + areaName
+func (c *Client) GetLocationInfo(area string) (LocationInfo, error) {
+	url := locationUrl + "/" + area
 	body, err := c.GetBody(url)
 	if err != nil {
 		return LocationInfo{}, fmt.Errorf("error from Client.GetLocationInfo: %w", err)
